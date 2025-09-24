@@ -1,0 +1,30 @@
+server:
+  port: 8090
+logging:
+  level:
+    org.springframework.cloud: DEBUG
+    org.springframework.cloud.gateway: DEBUG
+    org.springframework.cloud.gateway.route.RouteDefinitionLocator: DEBUG
+spring:
+  application:
+    name: gateway-service
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: usuario-service
+              uri: http://localhost:8081
+              predicates:
+                - Path=/arka/user/**
+              filters:
+                - RewritePath=/arka/user, /api/usuarios
+            - id: catalogo-service
+              uri: http://localhost:8082
+              predicates:
+                - Path=/api/productos/**
+            - id: notificacion-service
+              uri: http://localhost:8083
+              predicates:
+                - Path=api/notificaciones/**
+
