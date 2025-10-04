@@ -5,6 +5,9 @@ logging:
     org.springframework.cloud: DEBUG
     org.springframework.cloud.gateway: DEBUG
     org.springframework.cloud.gateway.route.RouteDefinitionLocator: DEBUG
+jwt:
+  secret-key:  6IjGfzxL2HkVz2/ejQ9tNj3YjwX2DPFNUKOSqEM7g6I=
+
 spring:
   application:
     name: gateway-service
@@ -27,4 +30,5 @@ spring:
               uri: http://localhost:8083
               predicates:
                 - Path=api/notificaciones/**
+
 
