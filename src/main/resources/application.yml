@@ -186,14 +186,236 @@ spring:
             - RewritePath=/arka/usuarios/(?<idUsuario>.*)/direcciones/(?<idDireccion>.*), /api/usuarios/$\{idUsuario}/direcciones/$\{idDireccion}
 
         # ========================================
-        # OTROS MICROSERVICIOS (sin cambios)
+        # CATALOG-SERVICE
         # ========================================
-        - id: catalogo-service
+
+        # CATEGORÍAS - PÚBLICAS (GET)
+        - id: categorias-listar
           uri: http://localhost:8082
           predicates:
-            - Path=/api/productos/**
+            - Path=/arka/categorias
+            - Method=GET
+          filters:
+            - RewritePath=/arka/categorias, /api/categorias
 
-        - id: notificacion-service
-          uri: http://localhost:8083
+        - id: categorias-por-id
+          uri: http://localhost:8082
           predicates:
-            - Path=/api/notificaciones/**otificaciones/**
+            - Path=/arka/categorias/{id}
+            - Method=GET
+          filters:
+            - RewritePath=/arka/categorias/(?<id>.*), /api/categorias/$\{id}
+
+        - id: categorias-por-nombre
+          uri: http://localhost:8082
+          predicates:
+            - Path=/arka/categorias/nombre/{nombre}
+            - Method=GET
+          filters:
+            - RewritePath=/arka/categorias/nombre/(?<nombre>.*), /api/categorias/nombre/$\{nombre}
+
+        - id: categorias-por-tipo
+          uri: http://localhost:8082
+          predicates:
+            - Path=/arka/categorias/tipo/{tipo}
+            - Method=GET
+          filters:
+            - RewritePath=/arka/categorias/tipo/(?<tipo>.*), /api/categorias/tipo/$\{tipo}
+
+      # CATEGORÍAS - SOLO ADMIN (POST, PUT, DELETE)
+        - id: categorias-crear
+          uri: http://localhost:8082
+          predicates:
+            - Path=/arka/categorias
+            - Method=POST
+          filters:
+            - JwtAuthenticationFilter
+            - AdminAuthorizationFilter
+            - RewritePath=/arka/categorias, /api/categorias
+
+        - id: categorias-actualizar
+          uri: http://localhost:8082
+          predicates:
+            - Path=/arka/categorias/{id}
+            - Method=PUT
+          filters:
+            - JwtAuthenticationFilter
+            - AdminAuthorizationFilter
+            - RewritePath=/arka/categorias/(?<id>.*), /api/categorias/$\{id}
+
+        - id: categorias-eliminar
+          uri: http://localhost:8082
+          predicates:
+            - Path=/arka/categorias/{id}
+            - Method=DELETE
+          filters:
+            - JwtAuthenticationFilter
+            - AdminAuthorizationFilter
+            - RewritePath=/arka/categorias/(?<id>.*), /api/categorias/$\{id}
+
+      # PRODUCTOS - PÚBLICOS (GET)
+        - id: productos-listar
+          uri: http://localhost:8082
+          predicates:
+            - Path=/arka/productos
+            - Method=GET
+          filters:
+            - RewritePath=/arka/productos, /api/productos
+
+        - id: productos-por-id
+          uri: http://localhost:8082
+          predicates:
+            - Path=/arka/productos/id/{id}
+            - Method=GET
+          filters:
+            - RewritePath=/arka/productos/id/(?<id>.*), /api/productos/id/$\{id}
+
+        - id: productos-por-nombre
+          uri: http://localhost:8082
+          predicates:
+            - Path=/arka/productos/nombre/{nombre}
+            - Method=GET
+          filters:
+            - RewritePath=/arka/productos/nombre/(?<nombre>.*), /api/productos/nombre/$\{nombre}
+
+        - id: productos-por-marca
+          uri: http://localhost:8082
+          predicates:
+            - Path=/arka/productos/marca/{marca}
+            - Method=GET
+          filters:
+            - RewritePath=/arka/productos/marca/(?<marca>.*), /api/productos/marca/$\{marca}
+
+        - id: productos-por-categoria
+          uri: http://localhost:8082
+          predicates:
+            - Path=/arka/productos/categoria/{categoria}
+            - Method=GET
+          filters:
+            - RewritePath=/arka/productos/categoria/(?<categoria>.*), /api/productos/categoria/$\{categoria}
+
+      # PRODUCTOS CON CONVERSIÓN DE MONEDA - PÚBLICOS
+        - id: productos-currency-listar
+          uri: http://localhost:8082
+          predicates:
+            - Path=/arka/productos/currencies/{currency}
+            - Method=GET
+          filters:
+            - RewritePath=/arka/productos/currencies/(?<currency>.*), /api/productos/currencies/$\{currency}
+
+        - id: productos-currency-por-id
+          uri: http://localhost:8082
+          predicates:
+            - Path=/arka/productos/currencies/{currency}/id/{id}
+            - Method=GET
+          filters:
+            - RewritePath=/arka/productos/currencies/(?<currency>.*)/id/(?<id>.*), /api/productos/currencies/$\{currency}/id/$\{id}
+
+        - id: productos-currency-por-nombre
+          uri: http://localhost:8082
+          predicates:
+            - Path=/arka/productos/currencies/{currency}/nombre/{nombre}
+            - Method=GET
+          filters:
+            - RewritePath=/arka/productos/currencies/(?<currency>.*)/nombre/(?<nombre>.*), /api/productos/currencies/$\{currency}/nombre/$\{nombre}
+
+        - id: productos-currency-por-marca
+          uri: http://localhost:8082
+          predicates:
+            - Path=/arka/productos/currencies/{currency}/marca/{marca}
+            - Method=GET
+          filters:
+            - RewritePath=/arka/productos/currencies/(?<currency>.*)/marca/(?<marca>.*), /api/productos/currencies/$\{currency}/marca/$\{marca}
+
+        - id: productos-currency-por-categoria
+          uri: http://localhost:8082
+          predicates:
+            - Path=/arka/productos/currencies/{currency}/categoria/{categoria}
+            - Method=GET
+          filters:
+            - RewritePath=/arka/productos/currencies/(?<currency>.*)/categoria/(?<categoria>.*), /api/productos/currencies/$\{currency}/categoria/$\{categoria}
+
+      # PRODUCTOS - SOLO ADMIN (POST, PUT, DELETE)
+        - id: productos-crear
+          uri: http://localhost:8082
+          predicates:
+            - Path=/arka/productos
+            - Method=POST
+          filters:
+            - JwtAuthenticationFilter
+            - AdminAuthorizationFilter
+            - RewritePath=/arka/productos, /api/productos
+
+        - id: productos-actualizar
+          uri: http://localhost:8082
+          predicates:
+            - Path=/arka/productos/{id}
+            - Method=PUT
+          filters:
+            - JwtAuthenticationFilter
+            - AdminAuthorizationFilter
+            - RewritePath=/arka/productos/(?<id>.*), /api/productos/$\{id}
+
+        - id: productos-eliminar
+          uri: http://localhost:8082
+          predicates:
+            - Path=/arka/productos/{id}
+            - Method=DELETE
+          filters:
+            - JwtAuthenticationFilter
+            - AdminAuthorizationFilter
+            - RewritePath=/arka/productos/(?<id>.*), /api/productos/$\{id}
+
+        # ========================================
+        # CARRITO-SERVICE
+        # ========================================
+
+        # Obtener carrito del usuario
+        - id: carrito-obtener
+          uri: http://localhost:8084
+          predicates:
+            - Path=/arka/carrito/{idUsuario}
+            - Method=GET
+          filters:
+            - JwtAuthenticationFilter
+            - RewritePath=/arka/carrito/(?<idUsuario>.*), /api/carrito/$\{idUsuario}
+
+        # Agregar producto al carrito
+        - id: carrito-agregar-producto
+          uri: http://localhost:8084
+          predicates:
+            - Path=/arka/carrito/agregar
+            - Method=POST
+          filters:
+            - JwtAuthenticationFilter
+            - RewritePath=/arka/carrito/agregar, /api/carrito/agregar
+
+        # Actualizar cantidad de producto
+        - id: carrito-actualizar-cantidad
+          uri: http://localhost:8084
+          predicates:
+            - Path=/arka/carrito/detalle/{idDetalle}/cantidad/{cantidad}
+            - Method=PUT
+          filters:
+            - JwtAuthenticationFilter
+            - RewritePath=/arka/carrito/detalle/(?<idDetalle>.*)/cantidad/(?<cantidad>.*), /api/carrito/detalle/$\{idDetalle}/cantidad/$\{cantidad}
+
+        # Eliminar producto del carrito
+        - id: carrito-eliminar-detalle
+          uri: http://localhost:8084
+          predicates:
+            - Path=/arka/carrito/detalle/{idDetalle}
+            - Method=DELETE
+          filters:
+            - JwtAuthenticationFilter
+            - RewritePath=/arka/carrito/detalle/(?<idDetalle>.*), /api/carrito/detalle/$\{idDetalle}
+
+        # Finalizar carrito (crear orden)
+        - id: carrito-finalizar
+          uri: http://localhost:8084
+          predicates:
+            - Path=/arka/carrito/finalizar/{idUsuario}
+            - Method=POST
+          filters:
+            - JwtAuthenticationFilter
+            - RewritePath=/arka/carrito/finalizar/(?<idUsuario>.*), /api/carrito/finalizar/$\{idUsuario}
